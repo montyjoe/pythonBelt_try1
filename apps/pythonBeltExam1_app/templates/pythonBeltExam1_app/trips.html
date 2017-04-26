@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>trips</title>
+    </head>
+    <body>
+        <h1>Hello, {{user.first_name}}!</h1>
+        <a href="/logout">Logout</a><br>
+        <h3>Plan a trip!</h3>
+        {% for message in messages %}
+            {% if "add_trip" in message.tags %}
+                <h4>{{message}}</h4>
+            {% endif %}
+        {% endfor %}
+        <form action="/trips/add" method="post" >
+            {% csrf_token %}
+            Destination:<input type="text" name="location"><br>
+            Description:<input type="text" name="description"><br>
+            Travel Date From:<input type="text" name="from"><br>
+            Travel Date To:<input type="text" name="to"><br>
+            <input type="submit" name="button"></button>
+        </form>
+        <h3>Trips</h3>
+            <table border = 1>
+                <tr>
+                    <th>Destination</th>
+                    <th>Plan</th>
+                    <th>Travel Start Date</th>
+                    <th>Travel End Date</th>
+                    <th>Do You Want to Join?</th>
+                </tr>
+                {% for trip in trips %}
+                    <tr>
+                        <td><a href="/trips/destination">{{trip.destination}}</a></td>
+                        <td>{{trip.plan}}</td>
+                        <td>{{trip.trip_to}}</td>
+                        <td>{{trip.trip_from}}</td>
+                        {% if trip.trip_user.id != request.session.id %}
+                            <td><a href="/trips/join">Join</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        <a href="/trips/add_page">Add Travel Plan</a>
+    </body>
+</html>
